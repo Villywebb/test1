@@ -1,3 +1,4 @@
+let name2 = 0
 let gameOver = false
 let gamePhaseActive = false
 let playersDone = 0
@@ -10,6 +11,7 @@ let counter = 0
 let index = 0
 let winner = ""
 input.onButtonPressed(Button.A, function () {
+    name2 = 0
     basic.showIcon(IconNames.Happy)
     gameOver = false
     gamePhaseActive = false
@@ -61,8 +63,8 @@ radio.onReceivedValue(function (name22, value) {
             winner = playerScoresName[highestScoreIndex(playerScores)]
             radio.sendValue(winner, playerScores[highestScoreIndex(playerScores)])
             for (let value of playerScoresName) {
-                if (value != winner) {
-                    radio.sendValue(value, 0)
+                if (value == !(winner)) {
+                	
                 }
             }
         }
