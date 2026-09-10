@@ -7,7 +7,6 @@ let playerScores: number[] = []
 let playerScoresName: string[] = []
 let highest = 0
 let counter = 0
-let index = 0
 let winner = ""
 input.onButtonPressed(Button.A, function () {
     basic.showIcon(IconNames.Happy)
@@ -15,9 +14,9 @@ input.onButtonPressed(Button.A, function () {
     gamePhaseActive = false
     playersDone = 0
     startPhaseActive = true
-    players = [""]
+    players = []
     playerScores = []
-    playerScoresName = ["\"\""]
+    playerScoresName = []
     radio.setGroup(69)
     radio.sendValue("s", 5)
 })
@@ -36,12 +35,11 @@ input.onButtonPressed(Button.AB, function () {
 })
 function findPlayer (name: string, players3: any[]) {
     counter = 0
-    while (index < 0) {
+    while (counter < players3.length) {
         if (name == players3[counter]) {
             return name
         }
         counter += 1
-        index += 1
     }
     return " "
 }
