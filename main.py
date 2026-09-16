@@ -1,72 +1,72 @@
-let name2 = 0
-let gameOver = false
-let gamePhaseActive = false
-let playersDone = 0
-let startPhaseActive = false
-let players: string[] = []
-let playerScores: number[] = []
-let playerScoresName: string[] = []
-let highest = 0
-let counter = 0
-let index = 0
-let winner = ""
-input.onButtonPressed(Button.A, function () {
-    name2 = 0
-    basic.showIcon(IconNames.Happy)
-    gameOver = false
-    gamePhaseActive = false
+gameOver = False
+gamePhaseActive = False
+playersDone = 0
+startPhaseActive = False
+players: List[str] = []
+playerScores: List[number] = []
+playerScoresName: List[str] = []
+highest = 0
+winner = ""
+counter = 0
+
+def on_button_pressed_a():
+    global gameOver, gamePhaseActive, playersDone, startPhaseActive, players, playerScores, playerScoresName
+    basic.show_icon(IconNames.HAPPY)
+    gameOver = False
+    gamePhaseActive = False
     playersDone = 0
-    startPhaseActive = true
-    players = [""]
+    startPhaseActive = True
+    players = []
     playerScores = []
-    playerScoresName = ["\"\""]
-    radio.setGroup(69)
-    radio.sendValue("s", 5)
-})
-function highestScoreIndex (array: number[]) {
+    playerScoresName = []
+    radio.set_group(89)
+input.on_button_pressed(Button.A, on_button_pressed_a)
+
+def highestScoreIndex(array: List[number]):
+    global highest
     highest = 0
-    for (let value of array) {
-        highest = Math.max(value, highest)
-    }
-    return array.indexOf(highest)
-}
-input.onButtonPressed(Button.AB, function () {
-    startPhaseActive = false
-    gamePhaseActive = true
-    basic.showString("Game on")
-    radio.sendValue("s", 0)
-})
-function findPlayer (name: string, players3: any[]) {
-    counter = 0
-    while (index < 0) {
-        if (name == players3[counter]) {
-            return name
-        }
-        counter += 1
-        index += 1
-    }
-    return " "
-}
-radio.onReceivedValue(function (name22, value) {
-    if (startPhaseActive) {
-        if (findPlayer(name22, players) == " ") {
-            players.push(name22)
-            basic.showString("" + name22 + "join")
-        }
-    }
-    if (gamePhaseActive) {
-        playerScores.push(value)
-        playerScoresName.push(name22)
-        playersDone += 1
-        if (playersDone == players.length) {
-            gameOver = true
+    for value in array:
+        highest = max(value, highest)
+    return array.index_of(highest)
+
+def on_received_value(name22, value2):
+    global playersDone, gamePhaseActive, winner
+    if startPhaseActive:
+        if findPlayer(name22, players) == " ":
+            players.append(name22)
+            basic.show_string(name22)
+    if gamePhaseActive:
+        if findPlayer(name22, players) != " " and findPlayer(name22, playerScoresName) == " ":
+            playerScores.append(value2)
+            playerScoresName.append(name22)
+            playersDone += 1
+        if playersDone == len(players):
+            gamePhaseActive = False
             winner = playerScoresName[highestScoreIndex(playerScores)]
-            radio.sendValue(winner, playerScores[highestScoreIndex(playerScores)])
-            for (let value of playerScoresName) {
-                if (value == !(winner)) {
-                	
-                }
-            }
-        }
-    }
-})
+            radio.send_value(winner, 1)
+            for value3 in playerScoresName:
+                if value3 != winner:
+                    radio.send_value(value3, 0)
+            basic.show_string(winner)
+radio.on_received_value(on_received_value)
+
+def on_button_pressed_ab():
+    global startPhaseActive, gamePhaseActive
+    startPhaseActive = False
+    gamePhaseActive = True
+    radio.send_value("s", 0)
+    while gamePhaseActive:
+        basic.show_icon(IconNames.SQUARE)
+        basic.pause(200)
+        basic.show_icon(IconNames.SMALL_SQUARE)
+        basic.pause(200)
+input.on_button_pressed(Button.AB, on_button_pressed_ab)
+
+def findPlayer(name: str, players3: List[any]):
+    global counter
+    counter = 0
+    while counter < len(players3):
+        if name == players3[counter]:
+            return name
+        counter += 1
+    return " "
